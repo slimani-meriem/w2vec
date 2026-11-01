@@ -108,7 +108,7 @@ def generate_negative_samples(positive_samples, words_count, valid_words,
         negatives.discard(ctxt_w)
         negatives.discard(target_word)
         while len(negatives) < k:
-            new_word = vocab[rng.choice(len(vocab), p=probabilities)]
+            new_word = valid_words[rng.choice(len(valid_words), p=probabilities)]
             if new_word != ctxt_w and new_word != target_word:
                 negatives.add(new_word)
         dataset.append((target_word, ctxt_w, list(negatives)))
