@@ -30,7 +30,8 @@ def sigmoid(x):
 # 1. Apprentissage
 # ---------------------------------------------------------------------------
 def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
-        shuffle=True, verbose=True):
+        shuffle=True, verbose=True,
+        loss_details=None):
     """
     Apprend les embeddings par descente de gradient (un exemple positif et ses
     k négatifs = un mini-batch).
@@ -43,6 +44,7 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
     :param seed: graine aléatoire (initialisation + mélange)
     :param shuffle: mélange l'ordre des exemples à chaque itération
     :param verbose: affiche la perte moyenne à chaque itération
+    :param loss_details : dictionnaire optionnel, rempli avec le détail de la perte
     :return: (W, losses) où W est la matrice des embeddings des mots cibles
              (taille len(vocab) x n) et losses la perte moyenne par itération
     """
@@ -56,11 +58,13 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
     order = np.arange(len(dataset_indices))
 
     losses = []
+    losses_pos, losses_neg = [], []      # perte moyenne du terme positif et du terme négatif, par itération
     for it in range(max_iter):
         if shuffle:
             rng.shuffle(order)
 
         total_loss = 0.0
+        total_pos, total_neg = 0.0, 0.0  # cumuls des deux termes pour cette itération
         for idx in order:
             w_idx, c_pos_idx, c_neg_indices = dataset_indices[idx]
 
@@ -76,6 +80,10 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
             total_loss -= (np.log(err_c_pos + 1.0 + 1e-10)
                            + np.sum(np.log(1.0 - err_c_neg + 1e-10))) # les 1e-10 est pour éviter les log(0)
 
+            if loss_details is not None:
+                total_pos -= np.log(err_c_pos + 1.0 + 1e-10)
+                total_neg -= np.sum(np.log(1.0 - err_c_neg + 1e-10))
+
             # Gradient par rapport au mot cible
             grad_w = err_c_pos * emb_c_pos + np.dot(err_c_neg, embs_c_neg)
 
@@ -86,8 +94,15 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
 
         mean_loss = total_loss / len(dataset_indices)
         losses.append(mean_loss)
+        if loss_details is not None:
+            losses_pos.append(total_pos / len(dataset_indices))
+            losses_neg.append(total_neg / len(dataset_indices))
         if verbose:
             print(f"Itération {it + 1}/{max_iter} - perte moyenne : {mean_loss:.4f}")
+
+    if loss_details is not None:
+        loss_details["pos"] = losses_pos
+        loss_details["neg"] = losses_neg
 
     return W, losses
 
