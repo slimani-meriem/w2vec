@@ -57,6 +57,7 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
     # --------------------------------
 
     W = (rng.random((N, n)) - 0.5) / n # les valeurs sont comprises entre -0,5/n et +0,5/n, centrées sur 0.
+    print("TEST TEST TEST TEST")
     C = np.zeros((N, n))                 # contextes initialisés à 0 (comme word2vec)
 
     dataset_indices = create_dataset_dictionary(vocab, dataset)
