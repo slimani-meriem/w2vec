@@ -2,7 +2,7 @@
 
 Implémentation de **word2vec** (skip-gram avec échantillonnage négatif) en **NumPy pur** : gradients écrits à la main, sans PyTorch ni TensorFlow. Les embeddings sont appris sur *Le Comte de Monte-Cristo* puis comparés à [Gensim](https://radimrehurek.com/gensim/).
 
-Projet réalisé dans le cadre d'un TP de machine learning. Le but n'est pas seulement de faire tourner l'algorithme, mais de **mesurer l'écart avec Gensim, de comprendre d'où il vient et de le réduire pas à pas** (voir [Perspectives](#perspectives)).
+Le but n'est pas seulement de faire tourner l'algorithme, mais de **mesurer l'écart avec Gensim, de comprendre d'où il vient et de le réduire pas à pas** (voir [Perspectives](#perspectives)).
 
 ## Résultats
 
