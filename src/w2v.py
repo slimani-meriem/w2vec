@@ -64,6 +64,7 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
 
     losses = []
     losses_pos, losses_neg = [], []      # perte moyenne du terme positif et du terme négatif, par itération
+
     for it in range(max_iter):
         if shuffle:
             rng.shuffle(order)
