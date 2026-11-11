@@ -30,8 +30,7 @@ def sigmoid(x):
 # 1. Apprentissage
 # ---------------------------------------------------------------------------
 def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
-        shuffle=True, verbose=True,
-        loss_details=None):
+        shuffle=True, verbose=True,  loss_details=None, eval_fn=None):
     """
     Apprend les embeddings par descente de gradient (un exemple positif et ses
     k négatifs = un mini-batch).
@@ -64,6 +63,7 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
 
     losses = []
     losses_pos, losses_neg = [], []      # perte moyenne du terme positif et du terme négatif, par itération
+    eval_scores = [] # pour garder une trace des scores d'évaluation au cours des itérations
 
     for it in range(max_iter):
         if shuffle:
@@ -109,6 +109,13 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
     if loss_details is not None:
         loss_details["pos"] = losses_pos
         loss_details["neg"] = losses_neg
+
+    if eval_fn is not None:
+        score = eval_fn(W)
+        eval_scores.append(score)
+
+    if eval_fn is not None:
+        return W, losses, eval_scores
 
     return W, losses
 
