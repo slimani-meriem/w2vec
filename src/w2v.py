@@ -103,16 +103,15 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
         if loss_details is not None:
             losses_pos.append(total_pos / len(dataset_indices))
             losses_neg.append(total_neg / len(dataset_indices))
+        if eval_fn is not None:
+            score = eval_fn(W)
+            eval_scores.append(score)
         if verbose:
             print(f"Itération {it + 1}/{max_iter} - perte moyenne : {mean_loss:.4f}")
 
     if loss_details is not None:
         loss_details["pos"] = losses_pos
         loss_details["neg"] = losses_neg
-
-    if eval_fn is not None:
-        score = eval_fn(W)
-        eval_scores.append(score)
 
     if eval_fn is not None:
         return W, losses, eval_scores
