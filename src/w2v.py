@@ -72,7 +72,7 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
     if eta_min is None :
         eta_min = eta
 
-    T = max_iter + len(order) # total steps
+    T = max_iter * len(order) # total steps
     t = 0
 
     for it in range(max_iter):
@@ -106,7 +106,7 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
             # ------------------------------
             # piste 3 : mise a jour de eta
             # -----------------------------
-            eta_t = eta -(eta -eta_min) * t / T
+            eta_t = eta -(eta - eta_min) * t / T
             t += 1
 
             # Mises à jour
