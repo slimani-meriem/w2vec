@@ -30,7 +30,8 @@ def sigmoid(x):
 # 1. Apprentissage
 # ---------------------------------------------------------------------------
 def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
-        shuffle=True, verbose=True,  loss_details=None, eval_fn=None):
+        shuffle=True, verbose=True,
+        loss_details=None, eval_fn=None, eta_min=None):
     """
     Apprend les embeddings par descente de gradient (un exemple positif et ses
     k négatifs = un mini-batch).
@@ -65,6 +66,15 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
     losses_pos, losses_neg = [], []      # perte moyenne du terme positif et du terme négatif, par itération
     eval_scores = [] # pour garder une trace des scores d'évaluation au cours des itérations
 
+    # ------------------------------------------------------------------
+    # Ajout pour la piste 3 : Linear decay pour le taux d'apprentissage
+    # -----------------------------------------------------------------
+    if eta_min is None :
+        eta_min = eta
+
+    T = max_iter + len(order) # total steps
+    t = 0
+
     for it in range(max_iter):
         if shuffle:
             rng.shuffle(order)
@@ -93,10 +103,16 @@ def w2v(dataset, vocab, n=100, max_iter=5, eta=0.1, seed=None,
             # Gradient par rapport au mot cible
             grad_w = err_c_pos * emb_c_pos + np.dot(err_c_neg, embs_c_neg)
 
+            # ------------------------------
+            # piste 3 : mise a jour de eta
+            # -----------------------------
+            eta_t = eta -(eta -eta_min) * t / T
+            t += 1
+
             # Mises à jour
-            C[c_pos_idx] -= eta * err_c_pos * emb_w
-            C[c_neg_indices] -= eta * err_c_neg[:, None] * emb_w
-            W[w_idx] -= eta * grad_w
+            C[c_pos_idx] -= eta_t * err_c_pos * emb_w
+            C[c_neg_indices] -= eta_t * err_c_neg[:, None] * emb_w
+            W[w_idx] -= eta_t * grad_w
 
         mean_loss = total_loss / len(dataset_indices)
         losses.append(mean_loss)
