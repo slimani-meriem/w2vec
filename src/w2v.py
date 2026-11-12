@@ -153,6 +153,22 @@ def save_embeddings(W, vocab, filename, precision=4):
         for word, vec in zip(vocab, W):
             f.write(word + " " + " ".join(f"{x:.{precision}f}" for x in vec) + "\n")
 
+# -----------------------------------------------------
+# Méthode util
+# -----------------------------------------------------
+def load_embeddings(filename):
+    """
+    Lit un fichier généré par save_embeddings et retourne la matrice des embeddings (N × n).
+    La première ligne ("N d") est ignorée. Pour chaque ligne suivante, le premier élément (le mot)
+    est supprimé afin de ne conserver que le vecteur numérique associé.
+
+    :param filename: chemin vers le fichier contenant les embeddings.
+    :return: matrice dimensions (N, n).
+    """
+    with open(filename, encoding=ENCODING) as f:
+        next(f)
+        return [line.split()[1:] for line in f if line.strip()]
+
 
 # ---------------------------------------------------------------------------
 # 4. Pipeline complet (pour le script et réutilisable depuis un notebook)
