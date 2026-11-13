@@ -1,5 +1,6 @@
-class KDNode :
-    def __init__(self, point, k, left=None, right=None):
+class KDNode:
+    def __init__(self, point, k, left=None, right=None, word=None):
+        self.word = word
         self.point = point # k-dimensional point dans notre cas ca sera l'embedding
         self.k = k # garde une trace de l'axe de compraison
         self.left = left
