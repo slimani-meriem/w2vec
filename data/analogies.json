@@ -1,48 +1,10 @@
 {
-    "fruit-arbre": [
-        [
-            "pommier",
-            "pomme",
-            "poirier",
-            "poire"
-        ],
-        [
-            "cerisier",
-            "cerise",
-            "prunier",
-            "prune"
-        ],
-        [
-            "olivier",
-            "olive",
-            "figuier",
-            "figue"
-        ],
-        [
-            "oranger",
-            "orange",
-            "citronnier",
-            "citron"
-        ],
-        [
-            "amandier",
-            "amande",
-            "noyer",
-            "noix"
-        ],
-        [
-            "framboisier",
-            "framboise",
-            "fraisier",
-            "fraise"
-        ]
-    ],
     "pays-capitale": [
         [
             "France",
             "Paris",
-            "Somalie",
-            "Mogadiscio"
+            "Algérie",
+            "Alger"
         ],
         [
             "Italie",
